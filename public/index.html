@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AURA Gold & Jewelry | Luxury Bullion & Fine Jewelry</title>
+  <meta name="description" content="Premium 24K, 22K, 18K fine gold jewelry and certified bullion bars. Reserve and book online with live gold rates.">
+  
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+
+  <!-- Icons (FontAwesome CDN) -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+
+  <!-- LIVE GOLD RATE TICKER BAR -->
+  <div class="gold-ticker-bar" id="goldTickerBar">
+    <div class="ticker-content">
+      <span class="ticker-item"><i class="fa-solid fa-chart-line gold-icon"></i> <strong>LIVE GOLD RATE (USD/gram):</strong></span>
+      <span class="ticker-item karat-badge 24k">24K (999.9 Fine): <strong id="rate24k">$78.50</strong>/g</span>
+      <span class="ticker-item karat-badge 22k">22K (Jewelry): <strong id="rate22k">$72.00</strong>/g</span>
+      <span class="ticker-item karat-badge 18k">18K (Standard): <strong id="rate18k">$58.80</strong>/g</span>
+      <span class="ticker-item live-pulse"><i class="fa-solid fa-circle"></i> Live Local DB Sync</span>
+    </div>
+  </div>
+
+  <!-- NAVIGATION HEADER -->
+  <header class="main-header">
+    <div class="nav-container">
+      <div class="brand-logo" onclick="app.navigateTo('store')">
+        <div class="logo-icon"><i class="fa-solid fa-crown"></i></div>
+        <div class="logo-text">
+          <span class="brand-title">AURA</span>
+          <span class="brand-sub">GOLD & JEWELRY</span>
+        </div>
+      </div>
+
+      <nav class="nav-links">
+        <a href="#" class="nav-link active" id="navStore" onclick="app.navigateTo('store')"><i class="fa-solid fa-gem"></i> Collections</a>
+        <a href="#" class="nav-link" id="navCalculator" onclick="app.navigateTo('calculator')"><i class="fa-solid fa-calculator"></i> Price Calculator</a>
+        <a href="#" class="nav-link" id="navOrders" onclick="app.navigateTo('my-orders')"><i class="fa-solid fa-box-archive"></i> My Bookings</a>
+        <a href="#" class="nav-link admin-nav-link" id="navAdmin" onclick="app.navigateTo('admin')"><i class="fa-solid fa-user-shield"></i> Server Admin</a>
+      </nav>
+
+      <div class="nav-actions">
+        <button class="cart-btn" onclick="client.toggleCartDrawer()">
+          <i class="fa-solid fa-bag-shopping"></i>
+          <span class="cart-badge" id="cartBadge">0</span>
+        </button>
+
+        <div class="auth-buttons" id="authNavButtons">
+          <!-- Populated dynamically via app.js -->
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- MAIN CONTAINER -->
+  <main class="app-content" id="appContent">
+    
+    <!-- 1. STOREFRONT VIEW -->
+    <section class="view-section active" id="viewStore">
+      <!-- HERO BANNER -->
+      <div class="hero-banner">
+        <div class="hero-overlay"></div>
+        <div class="hero-body">
+          <span class="hero-tag"><i class="fa-solid fa-sparkles"></i> Pure 24K Bullion & Fine Craftsmanship</span>
+          <h1 class="hero-title">Timeless Elegance.<br>Guaranteed Purity.</h1>
+          <p class="hero-desc">Reserve fine gold jewelry & bullion coins at direct live metal prices. No advance online payment required — complete address confirmation & pay on delivery.</p>
+          <div class="hero-cta-group">
+            <button class="btn btn-gold" onclick="document.getElementById('catalogGrid').scrollIntoView({behavior: 'smooth'})">
+              <i class="fa-solid fa-gem"></i> Explore Catalog
+            </button>
+            <button class="btn btn-glass" onclick="app.navigateTo('calculator')">
+              <i class="fa-solid fa-calculator"></i> Calculate Custom Gold Value
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- CATALOG SECTION -->
+      <div class="catalog-section">
+        <div class="section-header">
+          <div>
+            <h2 class="section-title">Current Gold Collections</h2>
+            <p class="section-subtitle">Prices dynamically computed based on live market rate + making charges</p>
+          </div>
+
+          <!-- FILTERS -->
+          <div class="filter-controls">
+            <div class="filter-group">
+              <label><i class="fa-solid fa-layer-group"></i> Category:</label>
+              <select id="filterCategory" onchange="client.filterCatalog()">
+                <option value="All">All Categories</option>
+                <option value="Rings">Rings</option>
+                <option value="Necklaces">Necklaces</option>
+                <option value="Coins & Bars">Coins & Bars</option>
+                <option value="Bangles">Bangles</option>
+                <option value="Earrings">Earrings</option>
+              </select>
+            </div>
+
+            <div class="filter-group">
+              <label><i class="fa-solid fa-coins"></i> Karat:</label>
+              <select id="filterKarat" onchange="client.filterCatalog()">
+                <option value="All">All Karats</option>
+                <option value="24">24K (999 Pure)</option>
+                <option value="22">22K (Crown)</option>
+                <option value="18">18K (Jewelry)</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <!-- PRODUCT GRID -->
+        <div class="product-grid" id="catalogGrid">
+          <!-- Dynamic rendering via client.js -->
+        </div>
+      </div>
+    </section>
+
+    <!-- 2. GOLD PRICE CALCULATOR VIEW -->
+    <section class="view-section" id="viewCalculator">
+      <div class="calculator-container">
+        <div class="glass-card calc-card">
+          <div class="card-header">
+            <h2><i class="fa-solid fa-calculator gold-icon"></i> Custom Gold Weight & Value Calculator</h2>
+            <p>Compute precise gold value by weight in grams, karat rating, and customized making charges.</p>
+          </div>
+          <div class="calc-grid">
+            <div class="calc-inputs">
+              <div class="form-group">
+                <label>Target Karat:</label>
+                <select id="calcKarat" onchange="client.recalculateCustomGold()">
+                  <option value="24">24K Pure Gold ($78.50/g)</option>
+                  <option value="22" selected>22K Crown Jewelry Gold ($72.00/g)</option>
+                  <option value="18">18K Fine Jewelry Gold ($58.80/g)</option>
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label>Weight (Grams):</label>
+                <input type="number" id="calcWeight" value="10.0" step="0.1" min="0.1" oninput="client.recalculateCustomGold()">
+              </div>
+
+              <div class="form-group">
+                <label>Making Charge (%):</label>
+                <input type="number" id="calcMakingPercent" value="12.0" step="0.5" min="0" oninput="client.recalculateCustomGold()">
+              </div>
+
+              <div class="form-group">
+                <label>Fixed Artisan Fee ($):</label>
+                <input type="number" id="calcMakingFixed" value="20.0" step="1" min="0" oninput="client.recalculateCustomGold()">
+              </div>
+            </div>
+
+            <div class="calc-results glass-card">
+              <h3>Price Breakdown</h3>
+              <div class="breakdown-row">
+                <span>Selected Live Gold Rate:</span>
+                <strong id="calcRatePerGram">$72.00 / gram</strong>
+              </div>
+              <div class="breakdown-row">
+                <span>Net Gold Weight:</span>
+                <strong id="calcNetWeight">10.0 grams</strong>
+              </div>
+              <div class="breakdown-row">
+                <span>Base Gold Value:</span>
+                <strong id="calcBaseVal">$720.00</strong>
+              </div>
+              <div class="breakdown-row">
+                <span>Crafting & Making Fee:</span>
+                <strong id="calcMakingVal">$106.40</strong>
+              </div>
+              <div class="breakdown-row">
+                <span>State Luxury Tax (3% GST):</span>
+                <strong id="calcTaxVal">$24.79</strong>
+              </div>
+              <hr class="gold-divider">
+              <div class="breakdown-row grand-total">
+                <span>Estimated Valuation:</span>
+                <strong id="calcGrandTotal">$851.19</strong>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 3. MY BOOKINGS VIEW -->
+    <section class="view-section" id="viewMyOrders">
+      <div class="orders-container">
+        <div class="section-header">
+          <div>
+            <h2><i class="fa-solid fa-box-archive gold-icon"></i> My Booked Gold Orders</h2>
+            <p>Track your reserved gold items, confirmed shipping address, and delivery status</p>
+          </div>
+          <button class="btn btn-outline" onclick="client.fetchMyOrders()"><i class="fa-solid fa-rotate"></i> Refresh</button>
+        </div>
+
+        <div id="myOrdersList" class="orders-list">
+          <!-- Dynamic rendering via client.js -->
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. SERVER ADMIN DASHBOARD VIEW -->
+    <section class="view-section" id="viewAdmin">
+      <div class="admin-container">
+        <div class="admin-header glass-card">
+          <div class="admin-title">
+            <h2><i class="fa-solid fa-user-shield gold-icon"></i> Server Management Dashboard</h2>
+            <p>Update live gold rates, manage catalog inventory, and control customer order bookings & address verification.</p>
+          </div>
+          <div class="admin-top-actions">
+            <button class="btn btn-gold" onclick="admin.openGoldRateModal()"><i class="fa-solid fa-chart-line"></i> Update Gold Rates</button>
+            <button class="btn btn-outline" onclick="admin.openProductModal()"><i class="fa-solid fa-plus"></i> Add New Product</button>
+          </div>
+        </div>
+
+        <!-- STATS OVERVIEW CARDS -->
+        <div class="admin-stats-grid">
+          <div class="stat-card glass-card">
+            <div class="stat-icon"><i class="fa-solid fa-receipt"></i></div>
+            <div class="stat-info">
+              <span class="stat-label">Total Bookings</span>
+              <h3 class="stat-value" id="adminStatOrders">0</h3>
+            </div>
+          </div>
+
+          <div class="stat-card glass-card">
+            <div class="stat-icon gold"><i class="fa-solid fa-weight-hanging"></i></div>
+            <div class="stat-info">
+              <span class="stat-label">Gold Reserved (Grams)</span>
+              <h3 class="stat-value" id="adminStatGrams">0.0 g</h3>
+            </div>
+          </div>
+
+          <div class="stat-card glass-card">
+            <div class="stat-icon"><i class="fa-solid fa-clock"></i></div>
+            <div class="stat-info">
+              <span class="stat-label">Pending Verifications</span>
+              <h3 class="stat-value" id="adminStatPending">0</h3>
+            </div>
+          </div>
+
+          <div class="stat-card glass-card">
+            <div class="stat-icon gold"><i class="fa-solid fa-vault"></i></div>
+            <div class="stat-info">
+              <span class="stat-label">Total Order Value</span>
+              <h3 class="stat-value" id="adminStatRevenue">$0.00</h3>
+            </div>
+          </div>
+        </div>
+
+        <!-- ADMIN TABS -->
+        <div class="admin-tabs">
+          <button class="tab-btn active" id="tabOrdersBtn" onclick="admin.switchTab('orders')"><i class="fa-solid fa-boxes-packing"></i> Customer Bookings & Address Audit</button>
+          <button class="tab-btn" id="tabCatalogBtn" onclick="admin.switchTab('catalog')"><i class="fa-solid fa-gem"></i> Inventory Catalog Manager</button>
+        </div>
+
+        <!-- ADMIN ORDERS TAB CONTENT -->
+        <div class="tab-content active" id="adminTabOrders">
+          <div class="glass-card">
+            <div class="table-responsive">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>Order #</th>
+                    <th>Customer Info</th>
+                    <th>Confirmed Shipping Address</th>
+                    <th>Reserved Weight</th>
+                    <th>Total Price</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="adminOrdersTableBody">
+                  <!-- Populated via admin.js -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- ADMIN CATALOG TAB CONTENT -->
+        <div class="tab-content" id="adminTabCatalog">
+          <div class="glass-card">
+            <div class="table-responsive">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>Item</th>
+                    <th>Category</th>
+                    <th>Karat</th>
+                    <th>Weight (g)</th>
+                    <th>Making Fee</th>
+                    <th>Est. Live Price</th>
+                    <th>Stock</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="adminCatalogTableBody">
+                  <!-- Populated via admin.js -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+  </main>
+
+  <!-- CART & ADDRESS CHECKOUT DRAWER -->
+  <div class="drawer-overlay" id="drawerOverlay" onclick="client.toggleCartDrawer()"></div>
+  <aside class="cart-drawer" id="cartDrawer">
+    <div class="drawer-header">
+      <h3><i class="fa-solid fa-bag-shopping gold-icon"></i> Gold Reservation Cart</h3>
+      <button class="close-drawer-btn" onclick="client.toggleCartDrawer()"><i class="fa-solid fa-xmark"></i></button>
+    </div>
+
+    <div class="drawer-body" id="cartItemsContainer">
+      <!-- Cart items or Address Confirmation Form -->
+    </div>
+
+    <div class="drawer-footer" id="cartDrawerFooter">
+      <!-- Footer buttons & order summary breakdown -->
+    </div>
+  </aside>
+
+  <!-- AUTH MODAL (LOGIN / REGISTER) -->
+  <div class="modal-overlay" id="authModal">
+    <div class="modal-card glass-card">
+      <button class="modal-close" onclick="app.closeAuthModal()"><i class="fa-solid fa-xmark"></i></button>
+      
+      <div class="modal-tabs">
+        <button class="auth-tab active" id="tabLoginBtn" onclick="app.switchAuthTab('login')">Sign In</button>
+        <button class="auth-tab" id="tabRegisterBtn" onclick="app.switchAuthTab('register')">Create Account</button>
+      </div>
+
+      <!-- LOGIN FORM -->
+      <form id="formLogin" class="auth-form active" onsubmit="app.handleLogin(event)">
+        <div class="form-group">
+          <label><i class="fa-solid fa-envelope"></i> Email Address</label>
+          <input type="email" id="loginEmail" placeholder="e.g. client@example.com" required>
+        </div>
+        <div class="form-group">
+          <label><i class="fa-solid fa-lock"></i> Password</label>
+          <input type="password" id="loginPassword" placeholder="••••••••" required>
+        </div>
+        <div class="demo-hints">
+          <p><strong>Quick Test Credentials:</strong></p>
+          <p><i class="fa-solid fa-user"></i> Client: <code>eleanor@example.com</code> / <code>client123</code></p>
+          <p><i class="fa-solid fa-user-shield"></i> Admin: <code>admin@auragold.com</code> / <code>admin123</code></p>
+        </div>
+        <button type="submit" class="btn btn-gold btn-block"><i class="fa-solid fa-right-to-bracket"></i> Sign In to Account</button>
+      </form>
+
+      <!-- REGISTER FORM -->
+      <form id="formRegister" class="auth-form" onsubmit="app.handleRegister(event)">
+        <div class="form-group">
+          <label><i class="fa-solid fa-user"></i> Full Name</label>
+          <input type="text" id="regFullName" placeholder="e.g. Lord Alexander" required>
+        </div>
+        <div class="form-group">
+          <label><i class="fa-solid fa-envelope"></i> Email Address</label>
+          <input type="email" id="regEmail" placeholder="alexander@example.com" required>
+        </div>
+        <div class="form-group">
+          <label><i class="fa-solid fa-phone"></i> Mobile Phone</label>
+          <input type="tel" id="regPhone" placeholder="+1 (555) 019-2831" required>
+        </div>
+        <div class="form-group">
+          <label><i class="fa-solid fa-lock"></i> Password</label>
+          <input type="password" id="regPassword" placeholder="Minimum 6 characters" required>
+        </div>
+        <button type="submit" class="btn btn-gold btn-block"><i class="fa-solid fa-user-plus"></i> Create Account</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- ADMIN GOLD RATE MODAL -->
+  <div class="modal-overlay" id="rateModal">
+    <div class="modal-card glass-card">
+      <button class="modal-close" onclick="admin.closeGoldRateModal()"><i class="fa-solid fa-xmark"></i></button>
+      <div class="modal-header">
+        <h3><i class="fa-solid fa-chart-line gold-icon"></i> Update Live Gold Metal Rates</h3>
+        <p>Changes automatically update calculated catalog values for all customers</p>
+      </div>
+      <form onsubmit="admin.handleUpdateRates(event)">
+        <div class="form-group">
+          <label>24K Pure Gold Rate ($ / gram):</label>
+          <input type="number" id="editRate24k" step="0.1" required>
+        </div>
+        <div class="form-group">
+          <label>22K Crown Gold Rate ($ / gram):</label>
+          <input type="number" id="editRate22k" step="0.1" required>
+        </div>
+        <div class="form-group">
+          <label>18K Fine Gold Rate ($ / gram):</label>
+          <input type="number" id="editRate18k" step="0.1" required>
+        </div>
+        <button type="submit" class="btn btn-gold btn-block"><i class="fa-solid fa-floppy-disk"></i> Broadcast Updated Rates</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- ADMIN PRODUCT MODAL -->
+  <div class="modal-overlay" id="productModal">
+    <div class="modal-card glass-card wide-modal">
+      <button class="modal-close" onclick="admin.closeProductModal()"><i class="fa-solid fa-xmark"></i></button>
+      <div class="modal-header">
+        <h3 id="productModalTitle"><i class="fa-solid fa-plus gold-icon"></i> Add New Product to Inventory</h3>
+      </div>
+      <form onsubmit="admin.handleSaveProduct(event)">
+        <input type="hidden" id="editProductId">
+        <div class="form-grid">
+          <div class="form-group">
+            <label>Product Title:</label>
+            <input type="text" id="prodTitle" placeholder="e.g. Solitaire 22K Ring" required>
+          </div>
+          <div class="form-group">
+            <label>Category:</label>
+            <select id="prodCategory">
+              <option value="Rings">Rings</option>
+              <option value="Necklaces">Necklaces</option>
+              <option value="Coins & Bars">Coins & Bars</option>
+              <option value="Bangles">Bangles</option>
+              <option value="Earrings">Earrings</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Karat Rating:</label>
+            <select id="prodKarat">
+              <option value="24">24K Pure Gold</option>
+              <option value="22" selected>22K Crown Gold</option>
+              <option value="18">18K Fine Gold</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Net Gold Weight (Grams):</label>
+            <input type="number" id="prodWeight" step="0.1" min="0.1" required>
+          </div>
+          <div class="form-group">
+            <label>Making Charge (%):</label>
+            <input type="number" id="prodMakingPercent" step="0.5" value="12.0">
+          </div>
+          <div class="form-group">
+            <label>Fixed Artisan Fee ($):</label>
+            <input type="number" id="prodMakingFixed" step="1" value="0.0">
+          </div>
+          <div class="form-group">
+            <label>Stock Quantity:</label>
+            <input type="number" id="prodStock" value="10" min="0">
+          </div>
+          <div class="form-group">
+            <label>Product Image Path/URL:</label>
+            <input type="text" id="prodImageUrl" value="/assets/gold_ring_royal.png" required>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Item Description:</label>
+          <textarea id="prodDescription" rows="3" placeholder="Craftsmanship details, hallmark notes, dimensions..."></textarea>
+        </div>
+        <button type="submit" class="btn btn-gold btn-block"><i class="fa-solid fa-check"></i> Save Product to Catalog</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- BOOKING RECEIPT CONFIRMATION MODAL -->
+  <div class="modal-overlay" id="receiptModal">
+    <div class="modal-card glass-card printable-receipt" id="receiptContent">
+      <!-- Generated dynamically after order booking -->
+    </div>
+  </div>
+
+  <!-- TOAST NOTIFICATIONS -->
+  <div class="toast-container" id="toastContainer"></div>
+
+  <!-- JS Scripts -->
+  <script src="/js/app.js"></script>
+  <script src="/js/client.js"></script>
+  <script src="/js/admin.js"></script>
+</body>
+</html>
